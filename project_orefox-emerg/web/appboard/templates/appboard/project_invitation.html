@@ -1,0 +1,26 @@
+{% extends 'appboard/base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<div class="container-fluid mt-4 mb-4">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Accept Invitation</h1>
+    </div>
+
+    If you think you are the right person then please accept this invitation now.
+    
+    <form action="{% url 'project_invitation' project_url=project_url invitation_code=invitation_code %}" method="POST">
+        {% csrf_token %}
+        <input class="btn btn-sm btn-danger mt-3 mr-2" type="submit" name="delete_invitation" value="Delete Invitation">
+        <input class="btn btn-sm btn-primary mt-3" type="submit" name="accept_invitation" value="Accept Invitation">
+    </form>
+    
+    <br>
+    Note: If you don't have an account please create an account first and verify it with the same email. Finally follow this link again.
+</div>
+
+{% endblock %}

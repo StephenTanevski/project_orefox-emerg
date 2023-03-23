@@ -1,0 +1,77 @@
+{% extends 'appboard/base.html' %}
+{% load static %}
+
+
+
+{% block content %}
+<!-- MultiStep Form -->
+
+<div class="container-fluid mt-4 mb-4">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Data Processing History</h1>
+    </div>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Retrieving last {{filter_days}} days data </h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Uploaded File</th>
+                            <th>Process</th>
+                            <th>Result File</th>
+                            <th>Uploaded At</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Uploaded File</th>
+                            <th>Process</th>
+                            <th>Result File</th>
+                            <th>Uploaded At</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        {% for pf in process_files %}
+                        <tr>
+                            <td>
+                                <a href="{{pf.uploaded_file.url}}" download>
+                                    {{pf.uploaded_filename}}
+                                </a>
+                            </td>
+                            <td>{{pf.process_name}}</td>
+                            <td>
+                                {% if pf.processed_file %}
+                                <a href="{{pf.processed_file.url}}" class="btn btn-success btn-sm" download>
+                                    <i class="fas fa-download"></i> Download
+                                </a>
+                                {% else %}
+                                <span class="text-danger">
+                                    Blank
+                                </span>
+                                {% endif %}
+                            </td>
+                            <td>{{pf.upload_time|date:"M d, Y"}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+{% endblock %}
+
+{% block extra_body %}
+
+<!-- Page level custom scripts -->
+<script src="{% static 'appboard/js/process_history.js' %}"></script>
+{% endblock %}

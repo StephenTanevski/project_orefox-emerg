@@ -1,0 +1,27 @@
+#data_cleaning_form .btn-radio.active{
+    background-color: var(--info);
+    color: var(--white);
+}
+
+.btn-radio{
+    cursor: pointer;
+}
+.btn-radio.active{
+    box-shadow: none;
+    border: 1px solid var(--info);
+    cursor: default !important;
+}
+.radio-group .btn-radio{
+    box-shadow: 0 0 1rem rgba(0,0,0,.25);
+    cursor: pointer;
+}
+.radio-group .btn-radio.active{
+    box-shadow: none;
+    border: 1px solid var(--info);
+    cursor: default !important;
+}
+.radio-group .btn-radio.active .card-header{
+    background-color: var(--info);
+    color: var(--white);
+}
+

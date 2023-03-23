@@ -1,0 +1,468 @@
+{% extends "appboard/base.html" %}
+{% load static %}
+
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'appboard/css/data-processor.css' %}">
+{% endblock %}
+
+
+{% block content %}
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h1 class="h3 mb-0 text-gray-800">Data Processor</h1>
+        <small><b>Project Name:</b> {{ project }}</small>
+    </div>
+    <div>
+        <b>
+            Project Credits: <span class="text-success">{{project_credits}}</span>
+        </b>
+    </div>
+</div>
+
+
+
+
+
+{% if project_credits %}
+<div class="container" id="data-processor">
+    <div class="card shadow">
+        <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs" id="bologna-list" role="tablist">
+                <!-- data upload -->
+                <li class="nav-item">
+                    <span class="nav-link tab-activation active" role="tab" nav-icon="fas fa-upload" tab-name="upload_data">
+                        <i class="icon fas fa-upload"></i> Upload
+                    </span>
+                </li>
+                <!-- data filter -->
+                <li class="nav-item">
+                    <span class="nav-link tab-activation" role="tab" nav-icon="fas fa-filter" tab-name="filter_data">
+                        <i class="icon"></i> Filtering
+                    </span>
+                </li>
+                <!-- data cleaning -->
+                <li class="nav-item">
+                    <span class="nav-link tab-activation" role="tab" nav-icon="fas fa-broom" tab-name="clean_data">
+                        <i class="icon"></i> Cleaning
+                    </span>
+                </li>
+                <!-- select data analysis -->
+                <li class="nav-item">
+                    <span class="nav-link tab-activation" role="tab" nav-icon="fas fa-hand-pointer" tab-name="select_analysis">
+                        <i class="icon"></i> Analysis
+                    </span>
+                </li>
+                <!-- plotter -->
+                <li class="nav-item">
+                    <span class="nav-link tab-activation" role="tab" nav-icon="fas fa-chart-area" tab-name="plotter">
+                        <i class="icon"></i> Plotter
+                    </span>
+                </li>
+                <!--Report Type-->
+                <li class="nav-item">
+                    <span class="nav-link tab-activation" role="tab" nav-icon="fas fa-table" tab-name="report_type">
+                        <i class="icon"></i> Report Type
+                    </span>
+                </li>
+                <!--Final Report-->
+                <li class="nav-item">
+                    <span class="nav-link tab-activation" role="tab" nav-icon="fas fa-table" tab-name="final_report">
+                        <i class="icon"></i> Final Report
+                    </span>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+        
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100" style="width: 15%">
+                    15%
+                </div>
+            </div>
+            <div class="tab-content mt-3">
+                <!-- Upload data -->
+                <div class="tab-pane tab-activation active" tab-name="upload_data" role="tabpanel" data-progress="15">
+                    <p class="h5 text-dark font-weight-bold mb-4">
+                        Upload Your Data
+                    </p>
+                    <div class="">
+
+                        <form id="file_uploader_form" 
+                        action="{% url 'processor_file_uploader' project_url=project_url %}" method="POST"
+                        enctype="multipart/form-data" >
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <input type="file" name="uploaded_file" class="form-control-file max-w-200" required>
+                            </div>
+
+                            <div class="card-footer mt-5 d-flex justify-content-end">
+                                <button type="submit" name="file_uploader_btn" class="max-w-200 btn btn-primary btn-sm rounded-0">
+                                    <!-- <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> -->
+                                    Next
+                                </button>
+                            </div>
+                        </form>
+                        <button class="d-none change-tab" next-tab="filter_data"></button>
+                    </div>
+
+                    
+                </div>
+
+                <!-- Filter data -->
+                <div class="tab-pane tab-activation" tab-name="filter_data" role="tabpanel" data-progress="30">
+                    <p class="h5 text-dark font-weight-bold mb-4">
+                        Data Filtration
+                    </p>
+                    <div>
+                        <div class="form-group range-wrap">
+                            <label>
+                                Columns will be removed if it has more than <span class="btn-sm btn-warning px-3 range-output">100%</span> missing data.
+                            </label>
+                            <div class="d-flex">
+                            <input type="range" name="filter_missing_data" class="form-control-range range" min="0" max="100" value="100">
+                            <span class="btn-sm btn-primary px-3 ml-2 range-output">100%</span>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive overflow-auto max-h-300">
+                            <table id="missing_data_table" class="table table-bordered data-missing overflow-auto">
+                                <colgroup>
+                                    <col span="1" style="width: 45px;">
+                                    <col span="1" style="width: auto;">
+                                    <col span="1" style="width: auto">
+                                 </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <input class="master-check" type="checkbox" name="" id="">
+                                        </th>
+                                        <th>Column Name</th>
+                                        <th>Missing Data (%)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="form-group mt-5">
+                            <label>
+                                Select Index Column
+                            </label>
+                            <select class="form-control" name="index_col">
+                                <option value="" selected>Select Index Column</option>
+                            </select>
+                        </div>
+                        <div class="form-group mt-5 d-none" id="sheet_name_selector">
+                            <label>
+                                Select Sheet Name
+                            </label>
+                            <select class="form-control" name="sheet_name">
+                                <option value="" selected>Select Sheet Name</option>
+                            </select>
+                        </div>
+
+                        <div class="card-footer mt-5 d-flex justify-content-end">
+                            <button type="submit" class="max-w-200 btn btn-primary btn-sm rounded-0 change-tab" next-tab="clean_data">
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clean data -->
+                <div class="tab-pane tab-activation" tab-name="clean_data" role="tabpanel" data-progress="45">
+                    <p class="h5 text-dark font-weight-bold mb-4">
+                        Data Cleaning
+                    </p>
+                    <div>
+                            
+                            <input type="hidden" class="process_id" name="process_id">
+                            <div class="form-group mt-5">
+                                <h6>Choose cleaner lab</h6>
+                                <input type="hidden" name="cleaner_lab">
+                                <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="none">None</label>
+                                <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="ALS">ALS</label>
+                                <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="OSNACA">OSNACA</label>
+                                <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="Petrosea">Petrosea</label>
+                            </div>
+
+                            <div class="form-group mt-5">
+                                <h6>Choose cleaner unit</h6>
+                                <input type="hidden" name="cleaner_unit">
+                                <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="ppb">PPB</label>
+                                <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="ppm">PPM</label>
+                                <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="pc">PC</label>
+                            </div>
+
+                            <div class="form-group mt-5">
+                                <h6>Choose cleaner action</h6>
+                                <input type="hidden" name="cleaner_action">
+                                <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="handle_inequalities">Handle Inequalities</label>
+                                <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="convert_uniform_units">Convert Uniform Units</label>
+                                <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="remove_columns">Remove Columns</label>
+                                <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="remove_duplicate_entries">Remove Duplicate Entries</label>
+                                <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="remove_entries">Remove Entries</label>
+                                <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="remove_empty_entries">Remove Empty Entries</label>
+                                <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="impute">Impute</label>
+                                <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="merge">Merge</label>
+                                <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="set_dtype">Set DType</label>
+                                <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="write_csv">Write CSV</label>
+                            </div>
+
+
+                            <div class="form-group mt-5">
+                                <h6>Choose cleaner imputing action</h6>
+                                <input type="hidden" name="cleaner_imputing_action">
+                                <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="none">None</label>
+                                <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="zero">Zero</label>
+                                <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="aca">ACA</label>
+                                <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="median">Median</label>
+                                <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="mean">Mean</label>
+                                <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="mice">Mice</label>
+                            </div>
+
+
+                            <div class="card-footer mt-5 d-flex justify-content-between">
+                                <button type="submit" class="max-w-200 btn btn-secondary btn-sm rounded-0 change-tab" next-tab="filter_data">
+                                    Previous
+                                </button>
+                                <button type="submit" class="max-w-200 btn btn-primary btn-sm rounded-0 change-tab" next-tab="select_analysis">
+                                    Next
+                                </button>
+                            </div>
+                        <button class="d-none change-tab" next-tab="report_2"></button>
+                    </div>
+                </div>
+
+                <!-- Select Analysis -->
+                <div class="tab-pane tab-activation" tab-name="select_analysis" role="tabpanel" data-progress="50">
+                    <p class="h5 text-dark font-weight-bold mb-4">
+                        Select Analysis
+                    </p>
+                    <div class="">
+
+                        <div class="row">
+                            <div class="col-12 col-md-3">
+                              <div class="nav flex-column nav-pills py-2" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                    <a class="nav-link active" id="Geochem-tab" data-toggle="pill" href="#Geochem" role="tab" aria-controls="Geochem" aria-selected="true">
+                                        Geochem 
+                                    </a>
+                                    <a class="nav-link" id="GeoPhysical-tab" data-toggle="pill" href="#GeoPhysical" role="tab" aria-controls="GeoPhysical" aria-selected="true">
+                                        GeoPhysical
+                                    </a>
+                              </div>
+                            </div>
+                            <div class="col-12 col-md-9">
+                                <div class="radio-group form-group">
+                                    <input type="hidden" name="analyser_action">
+                                    <div class="tab-content" id="v-pills-tabContent">
+
+                                    <div class="tab-pane fade show active" id="Geochem" role="tabpanel" aria-labelledby="Geochem-tab">
+                                        <div class="row">
+                                            <div class='col-lg-4 col-md-6 col-sm-12 p-2'>
+                                                <div class="card btn-radio h-100" data-value="get_stats">
+                                                    <div class="card-header">Get Stats</div>
+                                                    <div class="card-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas venenatis, enim ac pellentesque semper.</div>
+                                                </div>
+                                            </div>
+                                            <div class='col-lg-4 col-md-6 col-sm-12 p-2'>
+                                                <div class="card btn-radio h-100" data-value="summarise_float_column">
+                                                    <div class="card-header">Summarise Float Column</div>
+                                                    <div class="card-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas venenatis, enim ac pellentesque semper.</div>
+                                                </div>
+                                            </div>
+                                            <div class='col-lg-4 col-md-6 col-sm-12 p-2'>
+                                                <div class="card btn-radio h-100" data-value="kmeans">
+                                                    <div class="card-header">Kmeans</div>
+                                                    <div class="card-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas venenatis, enim ac pellentesque semper.</div>
+                                                </div>
+                                            </div>
+                                            <div class='col-lg-4 col-md-6 col-sm-12 p-2'>
+                                                <div class="card btn-radio h-100" data-value="kmeans_string_summary">
+                                                    <div class="card-header">Kmeans String Summary</div>
+                                                    <div class="card-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas venenatis, enim ac pellentesque semper.</div>
+                                                </div>
+                                            </div>
+                                            <div class='col-lg-4 col-md-6 col-sm-12 p-2'>
+                                                <div class="card btn-radio h-100" data-value="kmeans_predict">
+                                                    <div class="card-header">Kmeans Predict</div>
+                                                    <div class="card-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas venenatis, enim ac pellentesque semper.</div>
+                                                </div>
+                                            </div>
+                                            <div class='col-lg-4 col-md-6 col-sm-12 p-2'>
+                                                <div class="card btn-radio h-100" data-value="random_forest">
+                                                    <div class="card-header">Random Forest</div>
+                                                    <div class="card-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas venenatis, enim ac pellentesque semper.</div>
+                                                </div>
+                                            </div>
+                                            <div class='col-lg-4 col-md-6 col-sm-12 p-2'>
+                                                <div class="card btn-radio h-100" data-value="predict_random_forest">
+                                                    <div class="card-header">Predict Random Forest</div>
+                                                    <div class="card-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas venenatis, enim ac pellentesque semper.</div>
+                                                </div>
+                                            </div>
+                                            <div class='col-lg-4 col-md-6 col-sm-12 p-2'>
+                                                <div class="card btn-radio h-100" data-value="neural_network">
+                                                    <div class="card-header">Neural Network</div>
+                                                    <div class="card-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas venenatis, enim ac pellentesque semper.</div>
+                                                </div>
+                                            </div>
+                                            <div class='col-lg-4 col-md-6 col-sm-12 p-2'>
+                                                <div class="card btn-radio h-100" data-value="predict_neural_network">
+                                                    <div class="card-header">Predict Neural Network</div>
+                                                    <div class="card-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas venenatis, enim ac pellentesque semper.</div>
+                                                </div>
+                                            </div>
+                                            <div class='col-lg-4 col-md-6 col-sm-12 p-2'>
+                                                <div class="card btn-radio h-100" data-value="pca">
+                                                    <div class="card-header">PCA</div>
+                                                    <div class="card-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas venenatis, enim ac pellentesque semper.</div>
+                                                </div>
+                                            </div>
+                                            <div class='col-lg-4 col-md-6 col-sm-12 p-2'>
+                                                <div class="card btn-radio h-100" data-value="hca">
+                                                    <div class="card-header">HCA</div>
+                                                    <div class="card-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas venenatis, enim ac pellentesque semper.</div>
+                                                </div>
+                                            </div>
+                                            <div class='col-lg-4 col-md-6 col-sm-12 p-2'>
+                                                <div class="card btn-radio h-100" data-value="cc">
+                                                    <div class="card-header">CC</div>
+                                                    <div class="card-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas venenatis, enim ac pellentesque semper.</div>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="GeoPhysical" role="tabpanel" aria-labelledby="GeoPhysical-tab">
+                                        <div class="row">
+                                            <div class='col-lg-4 col-md-6 col-sm-12 p-2' data-value="get_stats">
+                                                <h4 class="text-danger">Comming Soon...</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-footer mt-5 d-flex justify-content-between">
+                            <button type="submit" class="max-w-200 btn btn-secondary btn-sm rounded-0 change-tab" next-tab="clean_data">
+                                Previous
+                            </button>
+                            <button type="submit" class="max-w-200 btn btn-primary btn-sm rounded-0 change-tab" next-tab="plotter">
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Plotter -->
+                <div class="tab-pane tab-activation" tab-name="plotter" role="tabpanel" data-progress="75">
+                    <p class="h5 text-dark font-weight-bold mb-4">
+                        Plotter
+                    </p>
+                    <div>
+                        <div class="form-group mt-5">
+                            <h6>Choose Plotter Action</h6>
+                            <input type="hidden" name="plotter_action">
+                            <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="visualise_empty_cells">Visualise Empty Cells</label>
+                            <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="visualise_empty_cells_bar">Visualise Empty Cells Bar</label>
+                            <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="2d_kmeans">2d Kmeans</label>
+                            <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="rf_importances">RF Importances</label>
+                            <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="pca_feature_bar">PCA Feature Bar</label>
+                            <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="pca_cumsum">PCA Cumsum</label>
+                            <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="dendrogram">Dendrogram</label>
+                            <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="cc_heatmap">CC Heatmap</label>
+                            <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="tf_losses">TF Losses</label>
+                            <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="tf_predictions">TF Predictions</label>
+                            <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="tf_predictions_hist">TF Predictions Hist</label>
+                        </div>
+                        
+                        <div class="card-footer mt-5 d-flex justify-content-between">
+                            <button type="submit" class="max-w-200 btn btn-secondary btn-sm rounded-0 change-tab" next-tab="select_analysis">
+                                Previous
+                            </button>
+                            <button type="submit" class="max-w-200 btn btn-primary btn-sm rounded-0 change-tab" next-tab="report_type">
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Type -->
+                <div class="tab-pane tab-activation" tab-name="report_type" role="tabpanel" data-progress="90">
+                    <p class="h5 text-dark font-weight-bold mb-4">
+                        Report
+                    </p>
+                    <div>
+                        <div class="form-group mt-5">
+                            <h6>Choose Report Action</h6>
+                            <input type="hidden" name="report_action">
+                            <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="data_report">Data Report</label>
+                            <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="cleaning_report">Cleaning Report</label>
+                            <label class="btn btn-outline-info btn-radio" style-class="btn-radio" data-value="analysis_report">Analysis Report</label>
+                        </div>
+                        <div class="card-footer mt-5 d-flex justify-content-between">
+                            <button type="submit" class="max-w-200 btn btn-secondary btn-sm rounded-0 change-tab" next-tab="plotter">
+                                Previous
+                            </button>
+                            <button type="submit" id="confirm_submit" class="max-w-200 btn btn-primary btn-sm rounded-0">
+                                Confirm & Submit
+                            </button>
+                            <button id="change_to_final_report" class="d-none change-tab" next-tab="final_report"></button>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Final Report -->
+                <div class="tab-pane tab-activation" tab-name="final_report" role="tabpanel" data-progress="100">
+                    <p class="h5 text-dark font-weight-bold mb-4">
+                        Final Report
+                    </p>
+                    <div>
+                        <div class="form-group mt-5 mb-4">
+                            Get Final Result
+                        </div>
+                        <div class="card-footer mt-5 d-flex justify-content-between">
+                            <button type="submit" class="max-w-200 btn btn-secondary btn-sm rounded-0 change-tab" next-tab="filter_data">
+                                Back To Filter
+                            </button>
+                            <a id="final_report_download_btn" type="submit" class="max-w-200 btn btn-success btn-sm rounded-0" download>
+                                Download Report
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="container">
+    <blockquote class="text-danger">
+        <h4>This project doesn't have any credits. Please load credits to this project first...</h4>
+    </blockquote>
+</div>
+{% endif %}
+
+
+
+
+
+{% endblock %}
+
+{% block extra_body %}
+<script>
+    let csrf_token = "{{ csrf_token }}"
+    let process_data_url = "{% url 'process_data' project_url=project_url %}"
+</script>
+<script src="{% static 'appboard/js/data-processor.js' %}"></script>
+{% endblock %}

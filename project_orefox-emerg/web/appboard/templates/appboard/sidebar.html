@@ -1,0 +1,71 @@
+{% load static %}
+{% url 'process_history' as process_history %}
+{% url 'appboard_home' as appboard_home %}
+{% url 'new_project' as new_project %}
+{% url 'transactions' as transactions %}
+{% url 'credits' as credits %}
+
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'appboard_home' %}">
+        <div class="sidebar-brand-icon rotate-n-15">
+            <img style="height: 40 !important; width: 40px;" src="{% static 'website/images/icons/counter-center-new.png' %}" alt="">
+        </div>
+        <div class="sidebar-brand-text mx-3">OreFox</div>
+    </a>
+
+
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+    <!-- Heading -->
+    <!-- <div class="sidebar-heading">
+        User Section
+    </div> -->
+
+    <!-- Nav Item - appboard -->
+    <li class="nav-item {% if request.get_full_path == appboard_home %}active{% endif %}">
+        <a class="nav-link" href="{% url 'appboard_home' %}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span></a>
+    </li>
+    <hr class="sidebar-divider my-0">
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'new_project' %}">
+            <i class="fas fa-fw fa-plus"></i>
+            <span>New Project</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'project_list' %}">
+            <i class="fas fa-fw fa-project-diagram"></i>
+            <span>Projects</span>
+        </a>
+    </li>
+
+    <li class="nav-item {% if request.get_full_path == credits %}active{% endif %}">
+        <a class="nav-link" href="{% url 'credits' %}">
+            <i class="fas fa-fw fa-coins"></i>
+            <span>My Credits</span></a>
+    </li>
+
+    <li class="nav-item {% if request.get_full_path == transactions %}active{% endif %}">
+        <a class="nav-link" href="{% url 'transactions' %}">
+            <i class="far fa-fw fa-money-bill-alt"></i>
+            <span>Transactions</span></a>
+    </li>
+
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+
+</ul>

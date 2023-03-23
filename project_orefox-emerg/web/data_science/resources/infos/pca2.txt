@@ -1,0 +1,1 @@
+This figure plots the cumulative explained variance in descending importance order for each principal component. Any point on the curve can be used to see how much of the variance of the dataset can be explained with that many dimensions in the PCA space.

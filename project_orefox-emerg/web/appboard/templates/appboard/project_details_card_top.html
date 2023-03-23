@@ -1,0 +1,22 @@
+{% url 'project_details' project_url=request.resolver_match.kwargs.project_url as project_details_url %}
+{% url 'project_members' project_url=request.resolver_match.kwargs.project_url as project_members_url %}
+<div class="card-header">
+    <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item">
+            <a class="nav-link {% if request.get_full_path == project_details_url %}active{% endif %}" 
+                href="{{project_details_url}}">Overview</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="">
+                Tasks <span class="badge badge-pill badge-info">3</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.get_full_path == project_members_url %}active{% endif %}" 
+            href="{{project_members_url}}">Members</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="">Settings</a>
+        </li>
+    </ul>
+</div>

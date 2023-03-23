@@ -1,0 +1,63 @@
+{% extends 'appboard/base.html' %}
+{% load static %}
+
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'appboard/css/ms-form-1.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- MultiStep Form -->
+
+<div class="container-fluid mt-4 mb-4">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">{{ project }} Project</h1>
+        <a href="{% url 'project_list' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+            class="fas fa-stream fa-sm text-white-50"></i> All Projects</a>
+    </div>
+    <div class="card shadow">
+        
+        {% include 'appboard/project_details_card_top.html' %}
+
+        <div class="card-body">
+            <h4 class="card-title">{{project.name}}</h4>
+            <h6 class="card-subtitle mb-2 text-muted"><i class="fas fa-map-marker-alt"></i> {{project.locality}}</h6>
+            <blockquote class="border-left border-dark pl-3">
+                {{project.objective}}
+            </blockquote>
+            <strong>Project Credits: <span class="text-success">{{projcet_credits}}</span></strong>
+        </div>
+        <div class="card-footer">
+            <a href="{% url 'data_processor' project_url=project.slug %}" class="btn btn-primary btn-sm">
+                 Data Processor
+            </a>
+        </div>
+
+               
+    </div>
+
+</div>
+
+
+{% endblock %}
+
+
+{% block extra_body %}
+<script src="{% static 'appboard/js/ms-form-1.js' %}"></script>
+<script>
+$(document).ready(function () {
+    $("#dataTable").DataTable({
+        paging: false,
+        // scrollY: 400,
+        // columnDefs: [
+        //     { orderable: false, targets: [0, 1, 2, 3] }
+        // ],
+        //order: [[2, 'asc']],
+        ordering: false
+
+    });
+});
+</script>
+{% endblock %}

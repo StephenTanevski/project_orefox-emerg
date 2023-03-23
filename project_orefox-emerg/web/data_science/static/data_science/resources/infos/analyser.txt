@@ -1,0 +1,11 @@
+Simple dataset stats - Retrieves number of columns and rows, the number of empty cells per row and column and the size of the dataset in memory.
+
+K Means - A clustering algorithm that tries to classify all data points into one of k clusters.
+
+Random Forest Regression - Performs a regression on a numerical dataset by creating a number of decision trees.
+
+Principal Component Analysis - Performs a change of basis on the dataset, which can be used to reduce the dimensionality of the dataset.
+
+Hierarchical Clustering Analysis - Performs a clustering of the dataset where clusters are are in a hierarchy.
+
+Correlation Coefficients - Computes the Pearson, Kendall and Spearman correlation coefficients for each pair of columns in the datasets.

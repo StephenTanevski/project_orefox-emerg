@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block head_title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'account/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'account/css/fontawesome-all.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'account/css/iofrm-style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'account/css/iofrm-theme4.css' %}">
+    {% block extra_head %}
+    {% endblock %}
+</head>
+<body>
+    {% block body %}
+    
+    
+    {% include 'account/notification.html' %}
+
+    <div class="form-body">
+        <div class="website-logo">
+            <a href="{% url 'website_home' %}">
+                <div class="logo">
+                    <img class="logo-size" src="{% static 'website/images/logo/dark-logo.png' %}" alt="">
+                </div>
+            </a>
+        </div>
+        <div class="row">
+            <div class="img-holder">
+                <div class="bg"></div>
+                <div class="info-holder">
+                    
+                    {% block info_content %}
+                    {% endblock %}
+                    
+                </div>
+            </div>
+            <div class="form-holder">
+                <div class="form-content">
+                    <div class="form-items mt-5">
+
+                        {% block content %}
+                        {% endblock %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+    
+<script src="{% static 'account/js/jquery.min.js' %}"></script>
+<script src="{% static 'account/js/popper.min.js' %}"></script>
+<script src="{% static 'account/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'account/js/main.js' %}"></script>
+{% block extra_body %}
+{% endblock %}
+</body>
+</html>

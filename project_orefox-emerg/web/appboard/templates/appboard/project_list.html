@@ -1,0 +1,54 @@
+{% extends 'appboard/base.html' %}
+{% load static %}
+
+
+
+{% block content %}
+<!-- MultiStep Form -->
+
+<div class="container-fluid mt-4 mb-4">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">All Projects</h1>
+        <a href="{% url 'new_project' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+            class="fas fa-plus fa-sm text-white-50"></i> New Project</a>
+    </div>
+    
+    <div class="row">
+    {% for member in members %}
+    <div class="col-lg-4 col-md-6 col-sm-12 my-3">
+        <a class="text-decoration-none text-reset" href="{% url 'project_details' project_url=member.project.slug %}">
+        <div class="card shadow project-card">
+            <div class="card-header text-dark">
+                    {{member.project.name}}
+            </div>
+            <div class="card-body">
+                Objective: {{member.project.objective}} <br>
+                Locality: {{member.project.locality}} <br>
+                Created At: {{member.project.created_at}} (UTC) <br>
+            </div>
+            <div class="card-footer"> 
+                <small>Roles 
+                    {% if member.is_owner %}
+                    <span class="label badge-primary px-2 mx-1">Owner</span>
+                    {% endif %}
+
+                    {% if member.is_member %}
+                    <span class="label badge-secondary px-2 mx-1">Member</span>
+                    {% endif %}
+
+                    {% if member.is_biller %}
+                    <span class="label badge-danger px-2 mx-1">Biller</span>
+                    {% endif %}
+                </small>
+            </div>
+        </div>
+        </a>
+
+    </div>
+    {% endfor %}
+    </div>
+    
+</div>
+{% endblock %}

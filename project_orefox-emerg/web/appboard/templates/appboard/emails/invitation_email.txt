@@ -1,0 +1,9 @@
+Hi there,
+
+User "{{ invitation.sender.email }}" invited you to join {{ invitation.project.name }} Project as a "Member" !
+
+To accept the invitation, please click the link below:
+{{ link }}
+
+Thanks from
+OreFox Team

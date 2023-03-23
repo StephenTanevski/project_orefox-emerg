@@ -1,0 +1,258 @@
+{% extends 'appboard/base.html' %}
+{% load static %}
+
+
+{% block content %}
+<!-- MultiStep Form -->
+
+<div class="container-fluid mt-4 mb-4">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">{{ project }} Project</h1>
+        <a href="{% url 'project_list' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                class="fas fa-stream fa-sm text-white-50"></i> All Projects</a>
+    </div>
+    <div class="card shadow">
+
+        {% include 'appboard/project_details_card_top.html' %}
+
+        <div class="card-body">
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h4 class="card-title">Members</h4>
+                {% if is_owner %}
+                <button class="btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#add_member_modal">
+                    <i class="fas fa-user-plus fa-sm text-white-50"></i> Add Member</button>
+                {% endif %}
+            </div>
+
+            <div class="table-responsive">
+                {% if is_owner %}
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                        <tr class="d-flex">
+                            <th class="col-6" scope="col">Member</th>
+                            <th class="col-4" scope="col">Roles</th>
+                            <th class="col-2" scope="col">Manage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for member in project.members.all %}
+                        <tr class="d-flex">
+                            <td class="col-6">{{ member.user.email }}</td>
+                            <td class="col-4">
+                                {% if member.is_owner %}
+                                <span class="label badge-primary px-2 mr-1 mb-1">Owner</span>
+                                {% endif %}
+
+                                {% if member.is_member %}
+                                <span class="label badge-secondary px-2 mr-1 mb-1">Member</span>
+                                {% endif %}
+
+                                {% if member.is_biller %}
+                                <span class="label badge-danger px-2 mr-1 mb-1">Biller</span>
+                                {% endif %}
+                            </td>
+                            <td class="col-2">
+                                <!-- <button class="d-none d-sm-inline-block btn btn-sm btn-info shadow-sm" data-toggle="modal" data-target="#add_member_modal">
+                                    <i class="fas fa-sm fa-user-cog text-white-50"></i> Manage Member</button> -->
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-sm btn-danger shadow-sm delete_member_modal_toggle"
+                                        data-toggle="tooltip" data-placement="bottom"
+                                        title="Delete user" targeted-member-email="{{ member.user.email }}">
+                                        <i class="fas fa-user-minus"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-primary shadow-sm update_member_modal_toggle"
+                                        data-toggle="tooltip" data-placement="bottom"
+                                        title="Manage user roles" targeted-member-email="{{ member.user.email }}" 
+                                        is-owner="{% if member.is_owner %}true{% endif %}" is-biller="{% if member.is_biller %}true{% endif %}">
+                                        <i class="fas fa-user-edit"></i>
+                                    </button>
+                                </div>
+
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                        <tr class="d-flex">
+                            <th class="col-6" scope="col">Member</th>
+                            <th class="col-6" scope="col">Roles</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for member in project.members.all %}
+                        <tr class="d-flex">
+                            <td class="col-6">{{ member.user.email }}</td>
+                            <td class="col-6">
+                                {% if member.is_owner %}
+                                <span class="label badge-primary px-2 mr-1 mb-1">Owner</span>
+                                {% endif %}
+
+                                {% if member.is_member %}
+                                <span class="label badge-secondary px-2 mr-1 mb-1">Member</span>
+                                {% endif %}
+
+                                {% if member.is_biller %}
+                                <span class="label badge-danger px-2 mr-1 mb-1">Biller</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+            </div>
+
+        </div>
+        <div class="card-footer">
+            <a href="{% url 'data_processor' project_url=project.slug %}" class="btn btn-primary btn-sm">
+                Link
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="add_member_modal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Invite A Member</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'invite_project_member' project_url=project_url %}" method="POST"
+                    id="send_invite_form">
+                    {% csrf_token %}
+                    <input type="email" name="email" class="form-control mb-2" placeholder="Member email" required>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="is_member" id="check_member" checked
+                            onclick="return false;">
+                        <label class="form-check-label" for="check_member">
+                            Member
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="is_biller" id="check_biller">
+                        <label class="form-check-label" for="check_biller">
+                            Biller
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="is_owner" id="check_owner">
+                        <label class="form-check-label" for="check_owner">
+                            Owner
+                        </label>
+                    </div>
+
+                    <!-- <select name="role" id="" class="form-control mb-2" required>
+            <option value="member">Member</option>
+            <option value="biller">Biller</option>
+            <option value="owner">Owner</option>
+        </select> -->
+                    <input type="submit" class="d-none"></input>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button class="btn btn-primary" id="send_invite_btn">Send Invitation</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete_member_modal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger">Are you sure?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    You are going to delete a member from this project. 
+                    <br>
+                    Member email: <b><span class="targeted_user_email"></span></b>
+                </div>
+                <form action="{% url 'manage_project_member' project_url=project_url %}" method="POST"
+                    id="delete_member_form">
+                    {% csrf_token %}
+                    <input type="hidden" name="target_member_email">
+                    <input type="submit" name="delete_member" class="d-none">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-sm btn-danger" id="delete_member_btn">Delete Member</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="update_member_modal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update member roles</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'manage_project_member' project_url=project_url %}" method="POST"
+                    id="update_member_form">
+                    {% csrf_token %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="is_member" id="update_check_member" checked
+                            onclick="return false;">
+                        <label class="form-check-label" for="update_check_member">
+                            Member
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="is_biller" id="update_check_biller">
+                        <label class="form-check-label" for="update_check_biller">
+                            Biller
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="is_owner" id="update_check_owner">
+                        <label class="form-check-label" for="update_check_owner">
+                            Owner
+                        </label>
+                    </div>
+                    <input type="hidden" name="target_member_email">
+                    <input type="submit" name="update_member" class="d-none">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button class="btn btn-primary" id="update_member_btn">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block extra_body %}
+<script src="{% static 'appboard/js/project_members.js' %}"></script>
+{% endblock %}

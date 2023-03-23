@@ -1,0 +1,61 @@
+{% load static %}
+
+<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+    <!-- Sidebar Toggle (Topbar) -->
+    <button id="sidebarToggleTop" class="btn btn-link rounded-circle mr-3">
+        <i class="fa fa-bars"></i>
+    </button>
+
+    <!-- Topbar Navbar -->
+    <ul class="navbar-nav ml-auto">
+
+        <div class="topbar-divider d-none d-sm-block"></div>
+
+        <!-- Nav Item - User Information -->
+        <li class="nav-item dropdown no-arrow">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                    {% if request.user.is_authenticated %}{{request.user.email}}{% else %}Anonymous{% endif %}
+                </span>
+                <img class="img-profile rounded-circle"
+                    src="{% static 'appboard/img/undraw_profile.svg' %}">
+            </a>
+            
+            <!-- Dropdown - User Information -->
+            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                aria-labelledby="userDropdown">
+                    <a class="dropdown-item" href="{% url 'website_home' %}">
+                        <i class="fas fa-globe-africa fa-sm fa-fw mr-2 text-gray-400"></i>
+                        Visit Website
+                    </a>
+                    <a class="dropdown-item" href="{% url 'appboard_home' %}">
+                        <i class="fas fa-tachometer-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                        Dashboard
+                    </a>
+                {% if request.user.is_authenticated %}
+                    <a class="dropdown-item" href="{% url 'account_inactive' %}">
+                        <i class="fas fa-heartbeat fa-sm fa-fw mr-2 text-gray-400"></i>
+                        Account Status
+                    </a>
+                    <a class="dropdown-item" href="{% url 'account_email' %}">
+                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                        Email Settings
+                    </a>
+                    <a class="dropdown-item" href="{% url 'account_change_password' %}">
+                        <i class="fas fa-user-cog fa-sm fa-fw mr-2 text-gray-400"></i>
+                        Change Pass
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{% url 'account_logout' %}" data-toggle="modal" data-target="#logoutModal">
+                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                        Logout
+                    </a>
+                {% endif %}
+            </div>  
+        </li>
+
+    </ul>
+
+</nav>

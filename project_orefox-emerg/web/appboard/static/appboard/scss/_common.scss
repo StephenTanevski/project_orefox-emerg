@@ -1,0 +1,74 @@
+.process-start-form{
+    input{
+        width: 200px !important;
+    }
+    input[type="file"] {
+        cursor: pointer;
+        overflow: hidden;
+    }
+    input[type="file" i] {
+        cursor: pointer;
+        overflow: hidden;
+    }
+    select {
+        width: 150px !important;
+    }
+    button{
+        width: 150px !important;
+    }
+}
+
+.overflow-x-auto{
+    overflow-x: auto;
+}
+.data-table{
+    width: 100%;
+}
+
+.bg-success-light{
+    background-color: #1987544b;
+}
+.bg-warning-light{
+    background-color: #ffc1074b;
+}
+.bg-danger-light{
+    background-color: #dc35454b;
+}
+.bg-primary-light{
+    background-color: #2732724b;
+}
+.max-w-700{
+    width: 100%;
+    max-width: 700px !important;
+}
+.max-w-400{
+    width: 100%;
+    max-width: 400px !important;
+}
+.max-w-300{
+    width: 100%;
+    max-width: 300px !important;
+}
+.max-w-200{
+    width: 100%;
+    max-width: 200px !important;
+}
+.max-w-100{
+    width: 100%;
+    max-width: 100px !important;
+}
+
+.spinner-border-sm{
+    vertical-align: middle;
+}
+
+.master-check,
+.c-check{
+    width: 20px;
+    height: 20px;
+}
+
+.max-h-300{
+    height: 100%;
+    max-height: 300px;
+}

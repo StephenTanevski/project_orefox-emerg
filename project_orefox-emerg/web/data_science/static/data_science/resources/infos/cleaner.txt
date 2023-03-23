@@ -1,0 +1,18 @@
+CONSTUCTOR
+
+No Specified Lab - Upload a .csv, .xlsx or .xls file.
+
+
+CLEANING METHODS
+
+Handle Inequalities - Cells with < or > at the beginning of them cannot be directly used in analysis, so this will remove the cells, setting them either to the figure after them or to zero in the < case.
+
+Convert Uniform Units - For all columns that are in percent, ppm or ppb, this will convert them all to the same unit.
+
+Remove Columns - Deletes columns from the dataset.
+
+Remove Entries - Deletes rows from the dataset.
+
+Impute Data - Fills in numerical data that is missing, using a variety of methods. Can choose from zero, average crustal abundance, median, mean and multiple imputation with chained equations.
+
+Save csv - Saves the current copy of the dataset as a .csv file.

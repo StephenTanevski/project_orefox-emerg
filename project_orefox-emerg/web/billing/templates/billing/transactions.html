@@ -1,0 +1,85 @@
+{% extends 'appboard/base.html' %}
+{% load static %}
+
+
+
+{% block content %}
+
+<div class="container-fluid mt-4 mb-4">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Transactions</h1>
+    </div>
+    <div class="w-100 border-bottom border-primary"></div>
+
+    <div class="my-5">
+        <div class="h4 text-dark">
+            Transaction History [<b class="text-success">30 days</b>]
+        </div>
+    
+        <div class="card shadow mt-4">
+            <div class="card-header">
+                <h3 class="h5 mb-0 text-gray-800">Transaction History</h3>
+            </div>
+            <div class="card-body p-0 overflow-auto" style="height: 100%; max-height: 300px">
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead class="thead-primary">
+                            <tr class="d-flex">
+                                <th class="col-6" scope="col">Description</th>
+                                <th class="col-4" scope="col">Time</th>
+                                <th class="col-2" scope="col">Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="d-flex">
+                                <td class="col-6">
+                                    Bought 30 credits
+                                </td>
+                                <td class="col-4">
+                                    May 21, 2021
+                                </td>
+                                <td class="col-2">
+                                    AU$10
+                                </td>
+                            </tr>
+                            <tr class="d-flex">
+                                <td class="col-6">
+                                    Bought 30 credits
+                                </td>
+                                <td class="col-4">
+                                    May 21, 2021
+                                </td>
+                                <td class="col-2">
+                                    AU$10
+                                </td>
+                            </tr>
+                            <tr class="d-flex">
+                                <td class="col-6">
+                                    Bought 30 credits
+                                </td>
+                                <td class="col-4">
+                                    May 21, 2021
+                                </td>
+                                <td class="col-2">
+                                    AU$10
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer text-right">
+                <a href="#" class="btn btn-sm btn-primary shadow-sm px-3">
+                    <i class="fas fa-file-download fa-sm text-white-50 mr-1"></i> PDF</a>
+                <a href="#" class="btn btn-sm btn-primary shadow-sm px-3 ml-2">
+                    <i class="fas fa-file-download fa-sm text-white-50 mr-1"></i> CSV</a>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+
+{% endblock %}

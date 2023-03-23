@@ -1,0 +1,1 @@
+Correlation coefficients take each pair of columns and computes a metric that defines how correlated those two columns are.
