@@ -1,7 +1,11 @@
 How to contribute
+
 If you want to work on a feature which is completly different than existing branches, create a new branch and work on it. For example, if you want to work on data science, then create a new branch named data_science, then create a folder to that branch named data_science and then put relevant files and folders inside it. Make sure all branch, file and folder names do not contain spaces. Instead you can use underscores (recommended) or hyphens.
 
+
+
 How to run this app in Local Machine (Linux Recommended)
+
 Clone this project
 Create and activate virtual environment
 Goto 'web' directory and install requirements with through pip pip install -r requirements.txt
